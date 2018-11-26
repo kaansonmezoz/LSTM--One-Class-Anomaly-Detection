@@ -6,4 +6,9 @@ Ardından /source içerisindeki create_anomaly_detector.py dosyası çalıştır
 /models içerisinde oluşuturulan modeller ve onlarla ilgili detaylar bulunur.
 
 Bu dosya güncellenecektir.
-Kullanılmayan fonksiyonlar mevcuttıur .py dosyalarında onlarda refactor edilecektir.
+Kullanılmayan fonksiyonlar, tekrar eden kod parçaları var .py dosyalarında, onlar da refactor edilecektir.
+
+Notlar: 
+* Sensör verilerinin 80Hz olanları sadece alınmıştır. Bunun altında kalan frekanslardaki sensör dosyaları resampling işlemine tabii tutulmayarak model için kullanılack verilerin içerisinde yer almamaktadır.
+* MobiFall'ın readme dosyasında yer alan özellikler ile veri özellikleri arasında örtüşmeyen durumlar vardır. Fall olaylarının süresi 10 saniye olarak belirtilmiştir bazı fall olayları 10 saniyeden daha fazla sürmektedir. Sensör verilerinin örnekleme frekansı da readme yazan frekans ile farklılık göstermektedir.
+* Kullanılan LSTM networkü "T. Theodoridis, V. Solachidis, Petros Daras, Nicholas Vretos" tarafından yayınlanan "Human Fall Detection from Acceleration Measurements Using a Recurrent Neural Network" makalesinden baz alınarak oluşturulmuştur.
