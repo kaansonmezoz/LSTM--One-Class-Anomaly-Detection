@@ -16,7 +16,7 @@ Notlar:
 
 -------> TODOS
   * Data preprocessing işlemlerinden normalizasyon eklenmeli
-  * Confussion matrix, F1 score ... gibi modeli değerlendirmeye yaran metrikler statistics.py'da kodlanmalı
+  * Confussion matrix, F1 score ... gibi değerler ve grafikler eklenmeli readme'ye
   * Refactoring
   * Tekrar eden fonksiyonlar, kod parçaları var 
   * DataFrame'deki problem daha kalıcı bir şekilde çözülmeli. Problem de yeni bir dataframe oluşturmak yerine bellekte ilk oluşturana ekleniyor dolayısıyla ADL ve FALL'lar aynı dataframe'de oluyor. Değişkenler temizlenmeden belli parçaları kodun tekrardan çalıştırıldığında eklemeye devam ediyor aynı dataframe'ye bu da tekrar eden windowların train set, test set gibi setlerde oluşmasına neden oluyor. Bu da hatalı sonuca yol açıyor. Dolayısıyla tekrardan bütün kodun çalıştırılması ve değişkenlerin temizlenmesi (Spyder ---> remove variables gibi ) gerekiyor.
