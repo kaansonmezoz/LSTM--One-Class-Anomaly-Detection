@@ -18,7 +18,7 @@ import numpy as np
 ### defining hyper parameters such as fitting parameters, dataset frequency, window size
 params = {'epochs': 50, 
           'batch_size': 128, 
-          'window_size': 600,   ### sample_duration * resample_frequency seklinde bulunur
+          'window_size': 300,   ### sample_duration * resample_frequency seklinde bulunur
           'sliding_window': 200, 
           'resample_frequency': 100,
           'resample_method': 'resample_sensor_frequency_decimation', ### bu metod adını kullanabileceğimiz bir parametre kullanılmalı resampling icin birden farki yontem verebilir halde olalim modele
@@ -31,7 +31,7 @@ params = {'epochs': 50,
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_4"
+OUTPUT_MODEL_NAME = "model_3"
 
 ### combining_sensor_files ile hem resampling olaylarini yapiyorduk bunu disaridan parametre alacak hale getirerek buradan calistirabilmemiz gerekir
 ### ve halihazirda o yontemle o frekansla kombine edilmisse dosyalar bunun kontrolü yapılmalı ki sürekli ayni tipte bir sey olusturulmasın
@@ -80,6 +80,8 @@ test_ADL_test_set(model, test_set_ADL, min_value, max_value, actual_ADL_count, O
 ### sadece son bes saniyeyi alarak yapmamiz gerekiyor ya da baska saniyeleri baz alarak suan alayini aliyoruz
 ### test_set icerisinde sadece fall'lar yok adl'lerde var bu acidan problemli bir durum bu kısma bakmamiz lazim yani
 ### adl bulunan eski dataframe'lerin icine ekliyor fall'lari
+### burada bir hata var su sekilde adl'lerin basindan ve sonundan iki saniye kesmezsem eğer 0 ve None göndererek read_from_file.get_samples düzgün sonuç döndümüyor boş döndürüyor neden ?
+### ayrıca hala dataframede su problemi cozmedik ayni memorydeki yere ekliyor belki bunun icin append kullanilabilir concat yerine bazi yerlerde dolayısıyla append vs concat'e daha iyi bakmak gerekebilir
 test_set_FALL = read_from_file.get_samples(FALL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
 
 ### Shaping datasets as in windows
@@ -90,4 +92,8 @@ test_set_FALL = test_set_FALL[ADL_set_size:] ## burada soyle bir problem var yen
 
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
-save_params(OUTPUT_MODEL_NAME, {'actual_output_fall': actual_FALL_count, 'actual_output_adl': actual_ADL_count}, 'predictions')
+# save_params(OUTPUT_MODEL_NAME, {'actual_output_fall': actual_FALL_count, 'actual_output_adl': actual_ADL_count}, 'predictions')
+
+from statistics import analyze_results
+
+analyze_results({'ADL': actual_ADL_count, 'FALL': actual_FALL_count}, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
