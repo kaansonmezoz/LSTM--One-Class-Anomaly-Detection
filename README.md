@@ -21,4 +21,5 @@ Notlar:
   * Tekrar eden fonksiyonlar, kod parçaları var 
   * DataFrame'deki problem daha kalıcı bir şekilde çözülmeli. Problem de yeni bir dataframe oluşturmak yerine bellekte ilk oluşturana ekleniyor dolayısıyla ADL ve FALL'lar aynı dataframe'de oluyor. Değişkenler temizlenmeden belli parçaları kodun tekrardan çalıştırıldığında eklemeye devam ediyor aynı dataframe'ye bu da tekrar eden windowların train set, test set gibi setlerde oluşmasına neden oluyor. Bu da hatalı sonuca yol açıyor. Dolayısıyla tekrardan bütün kodun çalıştırılması ve değişkenlerin temizlenmesi (Spyder ---> remove variables gibi ) gerekiyor.
   * Hareketlerden saniyeleri atma biraz problemli çalışıyor. Şöyle ki ADL'den herhangi bir atma yapmak istemezsek ve bunun için ilgili değerleri verirsek FALL'larda herhangi bir veri oluşmuyor okurken dosyadan. Burada bir problem var bu çözülmeli. Bu yüzden şimdilik hem fall'dan hem de adl verilerinin başından ve soununda kesme yapılıyor.
-  
+  * Resampling frekansı ile ilgili değişiklikler yapılarak tekrardan denenebilir. Resampling metodu olarak numpy'in bir fonksiyonu vardı o kullanılarak tekrar denenebilir. Bununla ilgili yöntemi metodu seçen kod kısmı da yazılması gerekmektedir.
+  * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır
