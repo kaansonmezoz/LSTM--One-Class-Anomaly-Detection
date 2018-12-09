@@ -23,3 +23,4 @@ Notlar:
   * Hareketlerden saniyeleri atma biraz problemli çalışıyor. Şöyle ki ADL'den herhangi bir atma yapmak istemezsek ve bunun için ilgili değerleri verirsek FALL'larda herhangi bir veri oluşmuyor okurken dosyadan. Burada bir problem var bu çözülmeli. Bu yüzden şimdilik hem fall'dan hem de adl verilerinin başından ve soununda kesme yapılıyor.
   * Resampling frekansı ile ilgili değişiklikler yapılarak tekrardan denenebilir. Resampling metodu olarak numpy'in bir fonksiyonu vardı o kullanılarak tekrar denenebilir. Bununla ilgili yöntemi metodu seçen kod kısmı da yazılması gerekmektedir.
   * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır
+  * Kesilme işlemi için ADL ve FALL verilerinin parametreleri farklı olmalı. Farklı saniye değerlerinin atılması sağlanır bu sayede ve bunun raporlanması daha kolay olur
