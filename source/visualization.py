@@ -88,3 +88,43 @@ def create_yticks_array(min_value, max_value):
         yticks.append(i)
         
     return yticks
+
+def plot_confussion_matrix(cm, output_path, normalize, title, color_map = plt.cm.Blues):
+    
+    if normalize:
+        ADL_count = cm[0][0] + cm[0][1]
+        FALL_count = cm[1][0] + cm[1][1]
+        
+        cm[0][0] /= ADL_count
+        cm[0][1] /= ADL_count
+        
+        cm[1][0] /= FALL_count
+        cm[1][1] /= FALL_count
+    
+    if max(cm[0]) > max(cm[1]):
+        thres = max(cm[0]) / 2
+    else:
+        thres = max(cm[1])
+        
+    plt.imshow(cm, interpolation = 'nearest', cmap = color_map)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = range(2) ## we have got only 2 classes
+    plt.xticks(tick_marks, ['ADL', 'FALL'], rotation = 45)
+    plt.yticks(tick_marks, ['ADL', 'FALL'])
+    
+    fmt = '.2f' if normalize else 'd'
+    
+    for i in range(2):
+        for j in range(2):
+            plt.text(j, i, format(cm[i][j], fmt), 
+                 horizontalalignment = "center", color= "white" if cm[i][j] > thres  else "black")
+        
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.tight_layout()
+    
+    plt.savefig(output_path + '/' + title + '.png')
+    plt.show()
+    
+    return    
