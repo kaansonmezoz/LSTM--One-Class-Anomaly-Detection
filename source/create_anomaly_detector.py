@@ -17,19 +17,28 @@ import numpy as np
 ### bizim bu parametreleri dosyadan okumamiz gerekiyorsa nasil modeli yukluyorsak
 ### defining hyper parameters such as fitting parameters, dataset frequency, window size
 
-params = {'epochs': 50, 
+params = {
+          'epochs': 50, 
           'batch_size': 128, 
-          'window_size': 300,   ### sample_duration * resample_frequency seklinde bulunur
+          'window_size': 300,           ### sample_duration * resample_frequency seklinde bulunur
           'sliding_window': 200, 
-          'resample_frequency': 100,
-          'resample_method': 'resample_sensor_frequency_decimation', ### bu metod adını kullanabileceğimiz bir parametre kullanılmalı resampling icin birden farki yontem verebilir halde olalim modele
-          'random_state_for_test_set' : 24,
-          'random_state_for_validation': 24,   ### genel kullanılan random_state degerleri 24 ya da 42
+          
+          'resample': {
+                  'frequency': 100,
+                   'method': 'resample_sensor_frequency_decimation' ### bu metod adını kullanabileceğimiz bir parametre kullanılmalı resampling icin birden farki yontem verebilir halde olalim modele
+          },          
+          
+          'random_state': {         ### genel kullanılan random_state degerleri 24 ya da 42
+              'test_set': 24,        
+              'validation_set': 24
+          },
+          
           'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_last_ADL': 2,                   ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse None verilmeli
           'chunk_size': 100,
           'cut_first_FALL': 2,
-          'cut_last_FALL': 2
+          'cut_last_FALL': 2,
+          'normalization': False
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
@@ -40,16 +49,16 @@ OUTPUT_MODEL_NAME = "model_12"
 ### combining_sensor_files ile hem resampling olaylarini yapiyorduk bunu disaridan parametre alacak hale getirerek buradan calistirabilmemiz gerekir
 ### ve halihazirda o yontemle o frekansla kombine edilmisse dosyalar bunun kontrolü yapılmalı ki sürekli ayni tipte bir sey olusturulmasın
 
-beginning_index = params['cut_first_ADL'] * params['resample_frequency']
+beginning_index = params['cut_first_ADL'] * params['resample']['frequency']
 
 if params['cut_last_ADL'] == 0:
     ending_index = None
 else:
-    ending_index = - (params['cut_last_ADL'] * params['resample_frequency'])
+    ending_index = - (params['cut_last_ADL'] * params['resample']['frequency'])
 
 train_set = read_from_file.get_samples(ADL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
 
-train_set_ADL, validation_set_ADL, test_set_ADL = get_datasets(train_set, params['window_size'], params['random_state_for_test_set'], params['random_state_for_validation'])
+train_set_ADL, validation_set_ADL, test_set_ADL = get_datasets(train_set, params['window_size'], params['random_state']['test_set'], params['random_state']['validation_set'])
 
 ADL_set_size = train_set_ADL.shape[0] + validation_set_ADL.shape[0] + test_set_ADL.shape[0]
 
@@ -78,12 +87,12 @@ actual_ADL_count = {'predicted_ADL': 0, 'predicted_FALL': 0} ### it stores count
 
 test_ADL_test_set(model, test_set_ADL, min_value, max_value, actual_ADL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
-beginning_index = params['cut_first_FALL'] * params['resample_frequency']
+beginning_index = params['cut_first_FALL'] * params['resample']['frequency']
 
 if params['cut_last_FALL'] == 0:
     ending_index = None
 else:
-    ending_index = - (params['cut_last_FALL'] * params['resample_frequency'])
+    ending_index = - (params['cut_last_FALL'] * params['resample']['frequency'])
 
 test_set_FALL = read_from_file.get_samples(FALL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
 
