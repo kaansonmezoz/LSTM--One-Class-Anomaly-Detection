@@ -1,5 +1,5 @@
-import json   ## Bu kaldırılacak daha sonra save_model silinecek cunku
-import os     ## Bu kaldırılacak daha sonra save_model silinecek cunku 
+import json   ## Bu kaldirilacak daha sonra save_model silinecek cunku
+import os     ## Bu kaldirilacak daha sonra save_model silinecek cunku 
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -34,7 +34,7 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     model = Sequential()
 
     ### Adding 1st LSTM Layer input_shape = (batch_size, timesteps, input_dimensions) 
-    model.add(LSTM(units = 200, return_sequences = True, input_shape = (params['window_size'], 9)))
+    model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['window_size'], 9))))
 
     ### Adding 2nd LSTM Layer
     model.add(LSTM(units = 200, return_sequences = False))

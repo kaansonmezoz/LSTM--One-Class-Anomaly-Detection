@@ -18,6 +18,3 @@ def get_datasets(train_set_ADL, window_size, random_state_test, random_state_val
     train_set_ADL = reshape_data_frame_for_LSTM(train_set_ADL, window_size)
     
     return split_datasets(train_set_ADL, random_state_test, random_state_validation)
-
-def get_expected_output_ADL(train_amount, validation_amount, test_amount):
-    return 
