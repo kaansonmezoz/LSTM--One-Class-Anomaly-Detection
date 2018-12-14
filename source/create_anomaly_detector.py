@@ -16,6 +16,7 @@ import numpy as np
 ### var demektir bu parametreler dosyaya surekli yaziliyor bunlarla ilgili  refactoring olmali. ayrica eger dosya halihazirda varsa yani model kayitliyse
 ### bizim bu parametreleri dosyadan okumamiz gerekiyorsa nasil modeli yukluyorsak
 ### defining hyper parameters such as fitting parameters, dataset frequency, window size
+
 params = {'epochs': 50, 
           'batch_size': 128, 
           'window_size': 300,   ### sample_duration * resample_frequency seklinde bulunur
@@ -24,24 +25,27 @@ params = {'epochs': 50,
           'resample_method': 'resample_sensor_frequency_decimation', ### bu metod adını kullanabileceğimiz bir parametre kullanılmalı resampling icin birden farki yontem verebilir halde olalim modele
           'random_state_for_test_set' : 24,
           'random_state_for_validation': 24,   ### genel kullanılan random_state degerleri 24 ya da 42
-          'cut_first': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_last': 2                   ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_last_ADL': 2,                   ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'chunk_size': 100,
+          'cut_first_FALL': 2,
+          'cut_last_FALL': 2
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_3"
+OUTPUT_MODEL_NAME = "model_12"
 
 ### combining_sensor_files ile hem resampling olaylarini yapiyorduk bunu disaridan parametre alacak hale getirerek buradan calistirabilmemiz gerekir
 ### ve halihazirda o yontemle o frekansla kombine edilmisse dosyalar bunun kontrolü yapılmalı ki sürekli ayni tipte bir sey olusturulmasın
 
-beginning_index = params['cut_first'] * params['resample_frequency']
+beginning_index = params['cut_first_ADL'] * params['resample_frequency']
 
-if params['cut_last'] == 0:
+if params['cut_last_ADL'] == 0:
     ending_index = None
 else:
-    ending_index = - (params['cut_last'] * params['resample_frequency'])
+    ending_index = - (params['cut_last_ADL'] * params['resample_frequency'])
 
 train_set = read_from_file.get_samples(ADL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
 
@@ -57,16 +61,13 @@ expected_output_validation = np.zeros((validation_set_ADL.shape[0], 1))
 model_file_path = OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/' + OUTPUT_MODEL_NAME +'.h5'
 
 if os.path.isfile(model_file_path):
-    ### load the model ...
-    print('Model daha onceden olusturulmus bu ad ile. Model yükleniyor')
+    print('Model has been already created with this name. Model is loading.')
     model = load_model(model_file_path)
+    model.summarize()
     
 else:
-    ### creating a new model
-    print('Yeni model olusturuluyor')
+    print('New model has been creating.')
     model = creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_train)
-    
-### buralarda bir fonksiyon olarak yapılabilir aslında
     
 min_value, max_value = test_ADL_validation_set(model, validation_set_ADL, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME, params)
 
@@ -77,22 +78,24 @@ actual_ADL_count = {'predicted_ADL': 0, 'predicted_FALL': 0} ### it stores count
 
 test_ADL_test_set(model, test_set_ADL, min_value, max_value, actual_ADL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
-### sadece son bes saniyeyi alarak yapmamiz gerekiyor ya da baska saniyeleri baz alarak suan alayini aliyoruz
-### test_set icerisinde sadece fall'lar yok adl'lerde var bu acidan problemli bir durum bu kısma bakmamiz lazim yani
-### adl bulunan eski dataframe'lerin icine ekliyor fall'lari
-### burada bir hata var su sekilde adl'lerin basindan ve sonundan iki saniye kesmezsem eğer 0 ve None göndererek read_from_file.get_samples düzgün sonuç döndümüyor boş döndürüyor neden ?
-### ayrıca hala dataframede su problemi cozmedik ayni memorydeki yere ekliyor belki bunun icin append kullanilabilir concat yerine bazi yerlerde dolayısıyla append vs concat'e daha iyi bakmak gerekebilir
+beginning_index = params['cut_first_FALL'] * params['resample_frequency']
+
+if params['cut_last_FALL'] == 0:
+    ending_index = None
+else:
+    ending_index = - (params['cut_last_FALL'] * params['resample_frequency'])
+
 test_set_FALL = read_from_file.get_samples(FALL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
+
+print("test_set_FALL.shape[0]: ", test_set_FALL.shape[0])
 
 ### Shaping datasets as in windows
 sample_amount = test_set_FALL.shape[0] // params['window_size']
 test_set_FALL = test_set_FALL.values
 test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , 9))
-test_set_FALL = test_set_FALL[ADL_set_size:] ## burada soyle bir problem var yeni bir dataframe yaratmak yerine halihazirdakine concat ediyor dolayısıyla her seferinde test_set_FALL'daki window'larda artıyor eger yeni bastan program calistirilmazsa. Her seferinde variable'lar temizlenmeli yani.
+#test_set_FALL = test_set_FALL[ADL_set_size:] ## burada soyle bir problem var yeni bir dataframe yaratmak yerine halihazirdakine concat ediyor dolayısıyla her seferinde test_set_FALL'daki window'larda artıyor eger yeni bastan program calistirilmazsa. Her seferinde variable'lar temizlenmeli yani.
 
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
-
-# save_params(OUTPUT_MODEL_NAME, {'actual_output_fall': actual_FALL_count, 'actual_output_adl': actual_ADL_count}, 'predictions')
 
 from statistics import analyze_results
 
