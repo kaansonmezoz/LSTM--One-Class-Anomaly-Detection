@@ -57,7 +57,7 @@ def plot_FALL_test(predicted, lower_threshold, upper_threshold, OUTPUT_PATH, fig
     plt.text(len(predicted), upper_threshold, 'y = ' + str(upper_threshold))
     plt.plot(lower_threshold_line['x'], lower_threshold_line['y'], color = 'red')
     plt.text(len(predicted), lower_threshold, 'y = ' + str(lower_threshold))
-    plt.title('prediction values of FALL test set')
+    plt.title('prediction values of FALL test set')     ## parametrik olmali ki bu sayede hem ADL hem de FALL icin uygun hale getiririz bu fonksiyonu
     plt.ylabel('output')
     plt.xlabel('input window no')
     plt.legend(['predicted output', 'threshold'], loc='best')
