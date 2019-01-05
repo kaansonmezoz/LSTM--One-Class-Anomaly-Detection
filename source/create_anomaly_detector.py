@@ -23,8 +23,6 @@ params = {
           'window_size': 300,           ### sample_duration * resample_frequency seklinde bulunur
           'window_feature': 9,
           'sliding_window': 200, 
-          'timestep_size': 10,
-          'timestep_feauture': 0,       ### bunun degeri ne de olsa window_size * window_feature / timestep_size ile hesaplanacak
           
           'resample': {
                   'frequency': 100,
@@ -38,7 +36,6 @@ params = {
           
           'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'chunk_size': 100,
           'cut_first_FALL': 2,
           'cut_last_FALL': 2,
           'normalization': False
@@ -47,7 +44,7 @@ params = {
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_18"
+OUTPUT_MODEL_NAME = "model_19"
 
 """
         Burayi baska zaman tekrar yapmak gerekecek
@@ -57,8 +54,6 @@ RESAMPLED_DATA_DIRECTORY = '../resampled-data/' + params['resample']['frequency'
 if not os.path.exists(RESAMPLED_DATA_DIRECTORY):
 
 """
-
-params['timestep_feature'] = params['window_size'] * params['window_feature'] // params['timestep_size']
     
 beginning_index = params['cut_first_ADL'] * params['resample']['frequency']
 
