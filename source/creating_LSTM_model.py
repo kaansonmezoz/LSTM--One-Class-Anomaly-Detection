@@ -4,6 +4,9 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from keras.layers import Reshape
+from keras.layers import Input
+from keras.layers import InputLayer
 from keras.layers import Flatten
 from visualization import plot_loss
 
@@ -32,9 +35,15 @@ def save_model(model, model_name, fitting_params):
 def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_train):
     ### Creating LSTM architecture 
     model = Sequential()
-
+    
+    #model.add(Input(shape=(params['window_size']*9)))
+    #model.add(InputLayer((params['window_size'], 9)))
+    
+    # target_shape=(timestep, feature)  timestep * feature = window_size * 9 olmali
+    #model.add(Reshape(target_shape=(params['timestep_size'], params['timestep_feature'])))
+    
     ### Adding 1st LSTM Layer input_shape = (batch_size, timesteps, input_dimensions) 
-    model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['window_size'], 9))))
+    model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['window_size'],params['window_feature']))))
 
     ### Adding 2nd LSTM Layer
     model.add(LSTM(units = 200, return_sequences = False))

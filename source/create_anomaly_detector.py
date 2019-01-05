@@ -21,7 +21,10 @@ params = {
           'epochs': 50, 
           'batch_size': 128, 
           'window_size': 300,           ### sample_duration * resample_frequency seklinde bulunur
+          'window_feature': 9,
           'sliding_window': 200, 
+          'timestep_size': 10,
+          'timestep_feauture': 0,       ### bunun degeri ne de olsa window_size * window_feature / timestep_size ile hesaplanacak
           
           'resample': {
                   'frequency': 100,
@@ -34,7 +37,7 @@ params = {
           },
           
           'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse None verilmeli
+          'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           'chunk_size': 100,
           'cut_first_FALL': 2,
           'cut_last_FALL': 2,
@@ -44,11 +47,19 @@ params = {
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_12"
+OUTPUT_MODEL_NAME = "model_18"
 
-### combining_sensor_files ile hem resampling olaylarini yapiyorduk bunu disaridan parametre alacak hale getirerek buradan calistirabilmemiz gerekir
-### ve halihazirda o yontemle o frekansla kombine edilmisse dosyalar bunun kontrolü yapılmalı ki sürekli ayni tipte bir sey olusturulmasın
+"""
+        Burayi baska zaman tekrar yapmak gerekecek
+        
+RESAMPLED_DATA_DIRECTORY = '../resampled-data/' + params['resample']['frequency'] + '_' + params['resample']['method']
 
+if not os.path.exists(RESAMPLED_DATA_DIRECTORY):
+
+"""
+
+params['timestep_feature'] = params['window_size'] * params['window_feature'] // params['timestep_size']
+    
 beginning_index = params['cut_first_ADL'] * params['resample']['frequency']
 
 if params['cut_last_ADL'] == 0:
@@ -71,6 +82,7 @@ model_file_path = OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/' + OUTPUT_MODE
 
 if os.path.isfile(model_file_path):
     print('Model has been already created with this name. Model is loading.')
+    
     model = load_model(model_file_path)
     model.summarize()
     
@@ -102,7 +114,7 @@ print("test_set_FALL.shape[0]: ", test_set_FALL.shape[0])
 sample_amount = test_set_FALL.shape[0] // params['window_size']
 test_set_FALL = test_set_FALL.values
 test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , 9))
-#test_set_FALL = test_set_FALL[ADL_set_size:] ## burada soyle bir problem var yeni bir dataframe yaratmak yerine halihazirdakine concat ediyor dolayısıyla her seferinde test_set_FALL'daki window'larda artıyor eger yeni bastan program calistirilmazsa. Her seferinde variable'lar temizlenmeli yani.
+test_set_FALL = test_set_FALL[ADL_set_size:] ## burada soyle bir problem var yeni bir dataframe yaratmak yerine halihazirdakine concat ediyor dolayısıyla her seferinde test_set_FALL'daki window'larda artıyor eger yeni bastan program calistirilmazsa. Her seferinde variable'lar temizlenmeli yani.
 
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
