@@ -37,13 +37,13 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     model = Sequential()
     
     #model.add(Input(shape=(params['window_size']*9)))
-    #model.add(InputLayer((params['window_size'], 9)))
+    model.add(InputLayer((params['window_size'], 9)))
     
     # target_shape=(timestep, feature)  timestep * feature = window_size * 9 olmali
-    #model.add(Reshape(target_shape=(params['timestep_size'], params['timestep_feature'])))
+    model.add(Reshape(target_shape=(params['timestep_size'], params['timestep_feature'])))
     
     ### Adding 1st LSTM Layer input_shape = (batch_size, timesteps, input_dimensions) 
-    model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['window_size'],params['window_feature']))))
+    model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['timestep_size'],params['timestep_feature']))))
 
     ### Adding 2nd LSTM Layer
     model.add(LSTM(units = 200, return_sequences = False))
