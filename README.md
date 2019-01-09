@@ -17,7 +17,14 @@ Notlar:
 -------> TODOS
   * Data preprocessing işlemlerinden normalizasyon eklenmeli --> Eklendi aslında ama değişiklik yapılması gerekebilir.
   * Confussion matrix, F1 score ... gibi değerler ve grafikler eklenmeli readme'ye
-  * Refactoring
+  * Refactoring    ___________ create_LSTM_model.py : save_model ve save_parameters ile ilgili bir refactoring gerekebilir
+                  |___________ create_anomaly_detector.py : Gereksiz yorum satirlari olabilir ilgilenmek gerekebilir bu durum ile.
+                  |___________ combining_sensor_files.py : Gereksiz yorum satirlari olabilir.
+                  |___________ read_from_file.py : Gereksiz yorum satirlari var onlar kaldirilmali. ismi _files.py olmalı
+                  |___________ statistics.py : Gereksiz yorum satirlari var onlar kaldirilmali
+                  |___________ test_LSTM_model.py : Gereksiz yorum satirlari var onlar kaldirilmali. Daha iyi bir isim bulunabilir.
+                  |___________ visualization.py : Kod tekrarı var burasinin duzeltilmesi gerekiyor
+  
   * Tekrar eden fonksiyonlar, kod parçaları var 
   * Resampling frekansı ile ilgili değişiklikler yapılarak tekrardan denenebilir. Resampling metodu olarak numpy'in bir fonksiyonu vardı o kullanılarak tekrar denenebilir. Bununla ilgili yöntemi metodu seçen kod kısmı da yazılması gerekmektedir.
-  * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır
+  * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır.
