@@ -114,7 +114,6 @@ print("test_set_FALL.shape[0]: ", test_set_FALL.shape[0])
 sample_amount = test_set_FALL.shape[0] // params['window_size']
 test_set_FALL = test_set_FALL.values
 test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , 9))
-test_set_FALL = test_set_FALL[ADL_set_size:] ## burada soyle bir problem var yeni bir dataframe yaratmak yerine halihazirdakine concat ediyor dolayısıyla her seferinde test_set_FALL'daki window'larda artıyor eger yeni bastan program calistirilmazsa. Her seferinde variable'lar temizlenmeli yani.
 
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
