@@ -17,7 +17,7 @@ Notlar:
 -------> TODOS
   * Data preprocessing işlemlerinden normalizasyon eklenmeli --> Eklendi aslında ama değişiklik yapılması gerekebilir.
   * Confussion matrix, F1 score ... gibi değerler ve grafikler eklenmeli readme'ye
-  * Refactoring   
+  * Refactoring ____  
   |-------------> create_LSTM_model.py : save_model ve save_parameters ile ilgili bir refactoring gerekebilir               
   |-------------> create_anomaly_detector.py : Gereksiz yorum satirlari olabilir ilgilenmek gerekebilir bu durum ile.
   |-------------> combining_sensor_files.py : Gereksiz yorum satirlari olabilir.
