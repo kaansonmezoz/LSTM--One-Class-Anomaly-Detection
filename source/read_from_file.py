@@ -9,12 +9,16 @@ def get_data_from_files(file_paths):
     
     for i in range(size):
         ### sensor_data = pd.read_csv(file_paths[i], sep = '\t', header = None, skiprows = 1)
+        print(file_paths[i])
         sensor_data = pd.read_csv(file_paths[i], sep = '\t', header = None, names = ['acc-x', 'acc-y', 'acc-z', 'gyro-x', 'gyro-y', 'gyro-z', 'ori-x', 'ori-y', 'ori-z'], skiprows = 1)        
         sensor_datas.append({'sensor_data': sensor_data, 'file_name': file_paths[i]})
     
     return sensor_datas     ## bunlar data frame tabii list icindeki dataframe'ler var onemli 
 
 def get_file_paths(folder_path, file_paths = []):
+    
+    print(folder_path)
+    
     for file in os.listdir(folder_path):
         file_path = folder_path + "/" + file
         
@@ -104,6 +108,8 @@ def get_samples(train_folder_path, OUTPUT_PATH, beginning_index, ending_index, w
     file_paths = get_file_paths(train_folder_path)        
     sensor_datas = get_data_from_files(file_paths)    
     samples = get_sample_windows(sensor_datas, window_size, sliding_window, sample_info, beginning_index, ending_index)
+    
+    del file_paths[ : ]
     
     if not os.path.exists(OUTPUT_PATH):
         os.makedirs(OUTPUT_PATH)
