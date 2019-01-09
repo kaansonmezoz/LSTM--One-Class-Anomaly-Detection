@@ -105,6 +105,8 @@ def get_samples(train_folder_path, OUTPUT_PATH, beginning_index, ending_index, w
     sensor_datas = get_data_from_files(file_paths)    
     samples = get_sample_windows(sensor_datas, window_size, sliding_window, sample_info, beginning_index, ending_index)
     
+    del file_paths[ : ]
+
     if not os.path.exists(OUTPUT_PATH):
         os.makedirs(OUTPUT_PATH)
     
