@@ -44,7 +44,7 @@ params = {
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_19"
+OUTPUT_MODEL_NAME = "model_20"
 
 """
         Burayi baska zaman tekrar yapmak gerekecek

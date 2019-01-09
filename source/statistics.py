@@ -77,7 +77,7 @@ def save_statistics(actuals, accuracy, precision, recall, f1_score, output_path)
 
 def calculate_confussion_matrix(actuals, output_path, title = "Confussion_Matrix"):
     confussion_matrix = [[0,0],[0,0]]
-
+    
     confussion_matrix[0][0] = actuals['ADL']['predicted_ADL']       ## True Negative
     confussion_matrix[0][1] = actuals['ADL']['predicted_FALL']      ## False Positive
 
