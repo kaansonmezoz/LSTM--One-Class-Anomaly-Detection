@@ -20,6 +20,7 @@ import numpy as np
 params = {
           'epochs': 50, 
           'batch_size': 128, 
+          
           'window_size': 400,           ### sample_duration * resample_frequency seklinde bulunur
           'window_feature': 9,
           'sliding_window': 200, 
@@ -38,7 +39,8 @@ params = {
           'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           'cut_first_FALL': 2,
           'cut_last_FALL': 2,
-          'normalization': False
+          
+          'normalization': False,
           'normalization_range': '(-1,1)'  ### options for this parameter are '(-1,1)' and '(0,1)'
 }
 
