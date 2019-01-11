@@ -12,7 +12,9 @@ Bu tarz islemlerin istatistiginin tutuldugu sinif olmasi lazim buranin. En sonun
 """
 
 def analyze_results(actuals, output_path):
-    ### Positiveler fall olacak, negative'ler adl olacak çünkü. FALL oldu mu diye bakıyoruz diye düşünebiliriz
+    ### Positive ---> FALL 
+    ### Negative ---> ADL
+    
     ### True Positive ---> Actual FALL, also predicted as FALL  
     ### False Positive ---> Actual ADL, but predicted as FALL
 
@@ -32,34 +34,42 @@ def analyze_results(actuals, output_path):
 
 def calculate_accuracy(actuals):
     ### Calculating accuracy, accuracy = (TP + TN) / (TP + FP + TN + FN)
+    
     accuracy = (actuals['ADL']['predicted_ADL'] + actuals['FALL']['predicted_FALL']) / (actuals['ADL']['predicted_FALL'] + actuals['FALL']['predicted_ADL'] + actuals['ADL']['predicted_ADL'] + actuals['FALL']['predicted_FALL'])
+    
     print("Accuracy of the model: ", accuracy)
         
     return accuracy
 
 def calculate_precision(actuals):
     ### Calculating precision, precision = TP / (TP + FP) tahmin edilen fall'ların ne kadarı gerçekten de fall ?
+    
     precision = actuals['FALL']['predicted_FALL'] / (actuals['FALL']['predicted_FALL'] + actuals['ADL']['predicted_FALL'])
+    
     print("Precision of the model: ", precision)
     
     return precision
 
 def calculate_recall(actuals):
     ### Calculating the recall, recall = TP / (TP + FN) fall verileri ne kadar doğru tahmin edilmiş ? 
+    
     recall = actuals['FALL']['predicted_FALL'] / (actuals['FALL']['predicted_FALL'] + actuals['FALL']['predicted_ADL'])
+    
     print("Recall of the model: ", recall)
     
     return recall
 
 def calculate_f1_score(precision, recall):
     ### F1 score
+    
     f1_score = (2 * precision * recall) / (precision + recall)
+    
     print("F1 score: ", f1_score)
     
     return f1_score
 
 def save_statistics(actuals, accuracy, precision, recall, f1_score, output_path):
-    import json
+    from file_operations import save_json
     
     statistics = { 
             'actual_ADL': actuals['ADL'],
@@ -70,9 +80,8 @@ def save_statistics(actuals, accuracy, precision, recall, f1_score, output_path)
             'f1_score': f1_score            
     }
     
-    with open(output_path + '/statistics.json', 'w') as file:
-        file.write(json.dumps(statistics, indent = 4, sort_keys = True))
-
+    save_json(output_path, 'statistics', statistics)
+    
     return
 
 def calculate_confussion_matrix(actuals, output_path, title = "Confussion_Matrix"):

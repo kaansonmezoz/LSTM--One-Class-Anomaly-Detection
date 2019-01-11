@@ -1,5 +1,4 @@
 import pandas as pd
-import os
 
 ## COMBINED_DATA_PATH = "../resampled-data/train"  ### mesela bu disaridan bir parametre olarak gelmeli kod icerisine
 
@@ -16,6 +15,7 @@ def get_data_from_files(file_paths):
     return sensor_datas     ## bunlar data frame tabii list icindeki dataframe'ler var onemli 
 
 def get_file_paths(folder_path, file_paths = []):
+    import os 
     
     print(folder_path)
     
@@ -100,8 +100,7 @@ def get_column_names():
     return columns
 
 def get_samples(train_folder_path, OUTPUT_PATH, beginning_index, ending_index, window_size = 300, sliding_window = 200):
-    import json 
-    import os
+    from file_operations import save_json
     
     sample_info = {'ADL': get_ADL_sample_info(), 'FALL': get_FALL_sample_info()}
         
@@ -111,12 +110,8 @@ def get_samples(train_folder_path, OUTPUT_PATH, beginning_index, ending_index, w
     
     del file_paths[ : ]
     
-    if not os.path.exists(OUTPUT_PATH):
-        os.makedirs(OUTPUT_PATH)
-    
-    with open(OUTPUT_PATH + 'sample_info.json', 'w') as file:
-        file.write(json.dumps(sample_info, indent = 4, sort_keys = True))
-    
+    save_json(OUTPUT_PATH, 'sample_info', sample_info)
+
     return samples
 
 def get_FALL_sample_info():

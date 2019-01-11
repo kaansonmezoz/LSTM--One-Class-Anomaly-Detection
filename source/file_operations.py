@@ -1,4 +1,4 @@
-def save_json_file(output_path, output_name, output):
+def save_json(output_path, output_name, output):
     import json
     import os
     
