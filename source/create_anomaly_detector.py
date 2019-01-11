@@ -1,7 +1,7 @@
 import read_from_file
 import os.path
 from creating_LSTM_model import creating_model
-from creating_LSTM_model import save_params
+from file_operations import save_json_file
 from dataset_preparation import get_datasets
 from test_LSTM_model import test_ADL_validation_set
 from test_LSTM_model import test_ADL_test_set
@@ -44,7 +44,7 @@ params = {
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_20"
+OUTPUT_MODEL_NAME = "model_26"
 
 """
         Burayi baska zaman tekrar yapmak gerekecek
@@ -87,7 +87,7 @@ else:
     
 min_value, max_value = test_ADL_validation_set(model, validation_set_ADL, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME, params)
 
-save_params(OUTPUT_MODEL_NAME, params)
+save_json_file("../models/" + OUTPUT_MODEL_NAME, 'parameters', params)
 
 actual_FALL_count = {'predicted_FALL': 0, 'predicted_ADL': 0} ### it stores count of the prediction types when FALL test set is given
 actual_ADL_count = {'predicted_ADL': 0, 'predicted_FALL': 0} ### it stores count of the prediction types when ADL test set is given
