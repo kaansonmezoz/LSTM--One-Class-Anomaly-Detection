@@ -15,12 +15,17 @@ Notlar:
 * Kullanılan LSTM networkü "T. Theodoridis, V. Solachidis, Petros Daras, Nicholas Vretos" tarafından yayınlanan "Human Fall Detection from Acceleration Measurements Using a Recurrent Neural Network" makalesinden baz alınarak oluşturulmuştur.
 
 -------> TODOS
-  * Data preprocessing işlemlerinden normalizasyon eklenmeli
+  * Data preprocessing işlemlerinden normalizasyon eklenmeli --> Eklendi aslında ama değişiklik yapılması gerekebilir.
   * Confussion matrix, F1 score ... gibi değerler ve grafikler eklenmeli readme'ye
-  * Refactoring
+  * Refactoring   
+    |-------------> create_LSTM_model.py : save_model ve save_parameters ile ilgili bir refactoring gerekebilir                 
+    |-------------> create_anomaly_detector.py : Gereksiz yorum satirlari olabilir ilgilenmek gerekebilir bu durum ile.  
+    |-------------> combining_sensor_files.py : Gereksiz yorum satirlari olabilir.  
+    |-------------> read_from_file.py : Gereksiz yorum satirlari var onlar kaldirilmali. ismi files.py olmalı  
+    |-------------> statistics.py : Gereksiz yorum satirlari var onlar kaldirilmali  
+    |-------------> test_LSTM_model.py : Gereksiz yorum satirlari var onlar kaldirilmali. Daha iyi bir isim bulunabilir.  
+    |-------------> visualization.py : Kod tekrarı var burasinin duzeltilmesi gerekiyor  
+    
   * Tekrar eden fonksiyonlar, kod parçaları var 
-  * DataFrame'deki problem daha kalıcı bir şekilde çözülmeli. Problem de yeni bir dataframe oluşturmak yerine bellekte ilk oluşturana ekleniyor dolayısıyla ADL ve FALL'lar aynı dataframe'de oluyor. Değişkenler temizlenmeden belli parçaları kodun tekrardan çalıştırıldığında eklemeye devam ediyor aynı dataframe'ye bu da tekrar eden windowların train set, test set gibi setlerde oluşmasına neden oluyor. Bu da hatalı sonuca yol açıyor. Dolayısıyla tekrardan bütün kodun çalıştırılması ve değişkenlerin temizlenmesi (Spyder ---> remove variables gibi ) gerekiyor.
-  * Hareketlerden saniyeleri atma biraz problemli çalışıyor. Şöyle ki ADL'den herhangi bir atma yapmak istemezsek ve bunun için ilgili değerleri verirsek FALL'larda herhangi bir veri oluşmuyor okurken dosyadan. Burada bir problem var bu çözülmeli. Bu yüzden şimdilik hem fall'dan hem de adl verilerinin başından ve soununda kesme yapılıyor.
   * Resampling frekansı ile ilgili değişiklikler yapılarak tekrardan denenebilir. Resampling metodu olarak numpy'in bir fonksiyonu vardı o kullanılarak tekrar denenebilir. Bununla ilgili yöntemi metodu seçen kod kısmı da yazılması gerekmektedir.
-  * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır
-  * Kesilme işlemi için ADL ve FALL verilerinin parametreleri farklı olmalı. Farklı saniye değerlerinin atılması sağlanır bu sayede ve bunun raporlanması daha kolay olur
+  * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır.
