@@ -1,5 +1,3 @@
-import json   ## Bu kaldirilacak daha sonra save_model silinecek cunku
-import os     ## Bu kaldirilacak daha sonra save_model silinecek cunku 
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -9,28 +7,7 @@ from keras.layers import Input
 from keras.layers import InputLayer
 from keras.layers import Flatten
 from visualization import plot_loss
-
-def save_params(model_name, fitting_params, file_name = 'parameters'):
-    folder_path = "../models/" + model_name + '/'
-    
-    with open(folder_path + file_name + '.json', 'w') as file:
-        file.write(json.dumps(fitting_params, indent = 4, sort_keys = True))
-
-def save_model(model, model_name, fitting_params):
-    folder_path = "../models/" + model_name + '/'
-    json_string = model.to_json()  ### getting json of model architecture as in string
-    
-    model_json = json.loads(json_string)  ### converting json string to json (dict)
-    
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    
-    with open(folder_path + model_name + '.json', 'w') as file:
-        json.dump(model_json, file, indent = 4, sort_keys = True)
-    
-    save_params(model_name, fitting_params)
-    
-    model.save(folder_path + model_name + '.h5')
+from file_operations import save_model
     
 def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_train):
     ### Creating LSTM architecture 
@@ -65,7 +42,7 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     ### Fitting LSTM to the training set
     history = model.fit(train_set_ADL, expected_output_train, epochs = params['epochs'], batch_size = params['batch_size'])
 
-    save_model(model, OUTPUT_MODEL_NAME, params)
+    save_model('../models/' + OUTPUT_MODEL_NAME, OUTPUT_MODEL_NAME, model)
     plot_loss(history, "../models", OUTPUT_MODEL_NAME, params)
     
     return model

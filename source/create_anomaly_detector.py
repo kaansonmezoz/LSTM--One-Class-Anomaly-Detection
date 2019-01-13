@@ -1,7 +1,7 @@
 import read_from_file
 import os.path
 from creating_LSTM_model import creating_model
-from creating_LSTM_model import save_params
+from file_operations import save_json
 from dataset_preparation import get_datasets
 from test_LSTM_model import test_ADL_validation_set
 from test_LSTM_model import test_ADL_test_set
@@ -23,7 +23,7 @@ params = {
           'window_size': 300,           ### sample_duration * resample_frequency seklinde bulunur
           'window_feature': 9,
           'sliding_window': 200, 
-          'timestep_size': 10,
+          'timestep_size': 60,
           'timestep_feauture': 0,       ### bunun degeri ne de olsa window_size * window_feature / timestep_size ile hesaplanacak
           
           'resample': {
@@ -36,18 +36,19 @@ params = {
               'validation_set': 24
           },
           
-          'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'chunk_size': 100,
+          'cut_first_ADL': 0,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_last_ADL': 0,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           'cut_first_FALL': 2,
-          'cut_last_FALL': 2,
-          'normalization': False
+          'cut_last_FALL': 4,
+          
+          'normalization': False,
+          'normalization_range': '(-1,1)'  ### Suggested options are '(-1,1)' and '(0,1)'
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_18"
+OUTPUT_MODEL_NAME = "model_3"
 
 """
         Burayi baska zaman tekrar yapmak gerekecek
@@ -92,7 +93,7 @@ else:
     
 min_value, max_value = test_ADL_validation_set(model, validation_set_ADL, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME, params)
 
-save_params(OUTPUT_MODEL_NAME, params)
+save_json("../models/" + OUTPUT_MODEL_NAME, 'parameters', params)
 
 actual_FALL_count = {'predicted_FALL': 0, 'predicted_ADL': 0} ### it stores count of the prediction types when FALL test set is given
 actual_ADL_count = {'predicted_ADL': 0, 'predicted_FALL': 0} ### it stores count of the prediction types when ADL test set is given
