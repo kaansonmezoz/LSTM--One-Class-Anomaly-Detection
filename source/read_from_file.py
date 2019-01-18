@@ -95,23 +95,30 @@ def get_column_names():
     
     return columns
 
-def get_samples(train_folder_path, OUTPUT_PATH, beginning_index, ending_index, window_size = 300, sliding_window = 200):
+def get_samples(train_folder_path, OUTPUT_PATH, beginning_index, ending_index, params):
     import json 
     import os
+    from dataset_preparation import normalization
     
     sample_info = {'ADL': get_ADL_sample_info(), 'FALL': get_FALL_sample_info()}
         
     file_paths = get_file_paths(train_folder_path)        
     sensor_datas = get_data_from_files(file_paths)    
-    samples = get_sample_windows(sensor_datas, window_size, sliding_window, sample_info, beginning_index, ending_index)
+    samples = get_sample_windows(sensor_datas, params['window_size'], params['sliding_window'], sample_info, beginning_index, ending_index)
     
     del file_paths[ : ]
 
     if not os.path.exists(OUTPUT_PATH):
         os.makedirs(OUTPUT_PATH)
-    
+
     with open(OUTPUT_PATH + 'sample_info.json', 'w') as file:
         file.write(json.dumps(sample_info, indent = 4, sort_keys = True))
+    
+    if params['normalization'] == True:
+        downer_bound = params['normalization_downer_bound']
+        upper_bound = params['normalization_upper_bound']
+        
+        samples = normalization(samples, downer_bound, upper_bound)
     
     return samples
 
