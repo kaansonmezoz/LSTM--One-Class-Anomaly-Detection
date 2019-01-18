@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot_ADL_validation(predicted, lower_threshold, upper_threshold, OUTPUT_PATH):
+def plot_set_results(predicted, lower_threshold, upper_threshold, OUTPUT_PATH, title, fig_name, loc): ### ADL_validation icin loc='upper left', geri kalan datasetleri icin loc='best' olmali ama bir bakalim gene de diger turlu sekillerde de denemek lazim
     # prediction of validation test which is used for determining the threshold value
     
     x = range(len(predicted))
@@ -15,53 +15,11 @@ def plot_ADL_validation(predicted, lower_threshold, upper_threshold, OUTPUT_PATH
     plt.text(len(predicted), upper_threshold, 'y = ' + str(upper_threshold))
     plt.plot(lower_threshold_line['x'], lower_threshold_line['y'], color = 'red')
     plt.text(len(predicted), lower_threshold, 'y = ' + str(lower_threshold))
-    plt.title('prediction values of ADL validation set')
+    plt.title(title)    ### prediction values of ADL test set, prediction values of ADL validation set, prediction values of FALL test set
     plt.ylabel('output')
     plt.xlabel('input window no')
-    plt.legend(['predicted output', 'threshold'], loc='upper left')
-    plt.savefig(OUTPUT_PATH + '/' + 'prediction_validation_set_ADL.png')
-    plt.show()
-    
-    return
-
-def plot_ADL_test(predicted, lower_threshold, upper_threshold, OUTPUT_PATH):
-    
-    x = range(len(predicted))
-    
-    upper_threshold_line = {'x': x, 'y': np.full(len(predicted), upper_threshold)}
-    lower_threshold_line = {'x': x, 'y': np.full(len(predicted), lower_threshold)}
-    
-    plt.plot(predicted)
-    plt.plot(upper_threshold_line['x'], upper_threshold_line['y'],color = 'red')
-    plt.text(len(predicted), upper_threshold, 'y = ' + str(upper_threshold))
-    plt.plot(lower_threshold_line['x'], lower_threshold_line['y'], color = 'red')
-    plt.text(len(predicted), lower_threshold, 'y = ' + str(lower_threshold))
-    plt.title('prediction values of ADL test set')
-    plt.ylabel('output')
-    plt.xlabel('input window no')
-    plt.legend(['predicted output', 'threshold'], loc='best')
-    plt.savefig(OUTPUT_PATH + '/' + 'prediction_test_set_ADL.png')
-    plt.show()
-    
-    return
-
-def plot_FALL_test(predicted, lower_threshold, upper_threshold, OUTPUT_PATH, fig_name = 'prediction_test_set_FALL'):
-    
-    x = range(len(predicted))
-    
-    upper_threshold_line = {'x': x, 'y': np.full(len(predicted), upper_threshold)}
-    lower_threshold_line = {'x': x, 'y': np.full(len(predicted), lower_threshold)}
-    
-    plt.plot(predicted)
-    plt.plot(upper_threshold_line['x'], upper_threshold_line['y'],color = 'red')
-    plt.text(len(predicted), upper_threshold, 'y = ' + str(upper_threshold))
-    plt.plot(lower_threshold_line['x'], lower_threshold_line['y'], color = 'red')
-    plt.text(len(predicted), lower_threshold, 'y = ' + str(lower_threshold))
-    plt.title('prediction values of FALL test set')     ## parametrik olmali ki bu sayede hem ADL hem de FALL icin uygun hale getiririz bu fonksiyonu
-    plt.ylabel('output')
-    plt.xlabel('input window no')
-    plt.legend(['predicted output', 'threshold'], loc='best')
-    plt.savefig(OUTPUT_PATH + '/' + fig_name +'.png')
+    plt.legend(['predicted output', 'threshold'], loc = loc)
+    plt.savefig(OUTPUT_PATH + '/' + fig_name + '.png')
     plt.show()
     
     return
