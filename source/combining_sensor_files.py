@@ -181,19 +181,9 @@ def resample_sensor_frequency_decimation_fixed(acc_data, gyro_data, ori_data,new
     
     return dataframe
 
-"""
-    Bu fonksiyonda acc,gyro ve ori'nin gercek frekansları alinark isleme tabii tutuldular ve 
-    denk düşmeyen veriler için bir önceki ölçülen tekrar edilmiş oldu çünkü increment değeri 
-    kesirli olduğu zaman integer'a çevrildiğinde 0.4 artış değeri varsa gerçek manada artış 3 adım sonunda
-    gerçeklenmiş oluyor yani index0 = 0 ise inc=0.4 iken index0 = 0,0.4,0.8,1.2 şeklinde gidiyor ilk üç değer
-    inte çevirilnce aynı indexe tekabül ediyor gyro ve oriden yeni değerler okunurken acc'den ise daha önceki 
-    veriler tekrar edilmiş olarak resampling edilmiş oluyor
-"""
 
 def resample_sensor_frequency_decimation(acc_data, gyro_data, ori_data, event_period, new_freq = 100):
-    ### Normal sartlarda aslinda sample_duration tarzinda bir parametre gonderilmeli
-    ### Ve frekanslar acc_freq = acc_data_size / sample_duration tarzinda bulunmali
-        
+    
     acc_freq = calculate_frequency(event_period,acc_data.shape[0])   ### Mobifall'daki datasetlerde 80Hz ve üstünü 100müs gibi dusunelim demistik
     gyro_freq = calculate_frequency(event_period, gyro_data.shape[0])### Mobifall'daki datasetlerde gyroscope'un frekansı 200Hz'e çok yakın
     ori_freq = calculate_frequency(event_period, ori_data.shape[0])### Mobifall'daki datasetlerde orientation'un frekansı 200Hz'e çok yakın
@@ -205,25 +195,16 @@ def resample_sensor_frequency_decimation(acc_data, gyro_data, ori_data, event_pe
     acc_values = extract_sensor_data(acc_data, acc_data.shape[0], acc_increment)
     gyro_values = extract_sensor_data(gyro_data, gyro_data.shape[0], gyro_increment)
     ori_values = extract_sensor_data(ori_data, ori_data.shape[0], ori_increment)
-    
-    ### print("---------   Before resizing ---------")
-    ### print_values(acc_values, gyro_values, ori_values)
-    
-    ###acc_values, gyro_values, ori_values = cut_some_observations(acc_values, gyro_values, ori_values)
+
     cut_some_observations(acc_values, gyro_values, ori_values)
     
-    ### print("---------   After resizing -------")
-    ### print_values(acc_values, gyro_values, ori_values)
-        
     dataframe_data = get_dataframe_data_for_sensors(acc_values, gyro_values, ori_values)
     
     dataframe = pd.DataFrame(data = dataframe_data)
     
-    ### print(dataframe)
-    
     return dataframe
 
-"""  Bunlarda iste interpolation falan devreye girecekti ama yalan oldu elbette klasjdfklasjdf
+"""  
 def resample_with_numpy_fixed():
     return
 
@@ -267,18 +248,15 @@ def extract_sensor_data(sensor_data, sample_size, increment):
         
         index = index + increment
     
-    ### print("Sample-size : ", sample_size, "Increment: ", increment,"Index: ", index)
     return new_freq_data
 
 def cut_some_observations(acc_values, gyro_values, ori_values):
-    ### print("Cutting extra observations")
     
     acc_size = len(acc_values['x'])
     gyro_size = len(gyro_values['x'])
     ori_size = len(ori_values['x'])
     
     if acc_size < gyro_size and acc_size < ori_size:
-        ### print("acc en kucuk")
 
         gyro_values['x'] = gyro_values['x'][ : acc_size]
         gyro_values['y'] = gyro_values['y'][ : acc_size]
@@ -290,8 +268,7 @@ def cut_some_observations(acc_values, gyro_values, ori_values):
         
     
     elif gyro_size < ori_size:
-        ### print("gyro en kucuk")
-
+        
         acc_values['x'] = acc_values['x'][ : gyro_size]
         acc_values['y'] = acc_values['y'][ : gyro_size]
         acc_values['z'] = acc_values['z'][ : gyro_size]
@@ -301,7 +278,6 @@ def cut_some_observations(acc_values, gyro_values, ori_values):
         ori_values['z'] = ori_values['z'][ : gyro_size]
 
     else:
-        ### print("ori en kucuk")
 
         gyro_values['x'] = gyro_values['x'][ : ori_size]
         gyro_values['y'] = gyro_values['y'][ : ori_size]
@@ -311,8 +287,6 @@ def cut_some_observations(acc_values, gyro_values, ori_values):
         acc_values['y'] = acc_values['y'][ : ori_size]
         acc_values['z'] = acc_values['z'][ : ori_size]
     
-    ### print_values(acc_values, gyro_values, ori_values)
-    
     return
     
 def convert_acc_file_path(acc_file):
@@ -320,8 +294,6 @@ def convert_acc_file_path(acc_file):
     ori_file = acc_path_to_ori(acc_file)
     return gyro_file, ori_file
 
-### event_period is in seconds, data_length is the number of observations
-### so the return value of this function is in Hz
 def calculate_frequency(event_period, data_length):
     frequency = data_length / event_period
     return frequency
