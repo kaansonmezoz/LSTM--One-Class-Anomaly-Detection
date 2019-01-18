@@ -26,7 +26,7 @@ def test_model(model, datasets):
 ### Validation tests are used for determining thresholds and other parameters
 ### This function returns the upper and lower threshold for our detector based on adl dataset
 def test_ADL_validation_set(model, validation_set, OUTPUT_PATH, params):
-    from visualization import plot_ADL_validation
+    from visualization import plot_set_results
 
     predicted = model.predict(validation_set)
 
@@ -36,13 +36,13 @@ def test_ADL_validation_set(model, validation_set, OUTPUT_PATH, params):
 
     params['lower_threshold'] = str(min_value)
     params['upper_threshold'] = str(max_value)
-    
-    plot_ADL_validation(predicted, min_value, max_value, OUTPUT_PATH)
+
+    plot_set_results(predicted, min_value, max_value, OUTPUT_PATH, 'prediction values of ADL validation set', 'upper left')
         
     return min_value, max_value
 
 def test_ADL_test_set(model, test_set, lower_threshold, upper_threshold, actual_ADL_count, OUTPUT_PATH):
-    from visualization import plot_ADL_test
+    from visualization import plot_set_results
     
     predicted = model.predict(test_set)
     size = len(predicted)
@@ -53,10 +53,10 @@ def test_ADL_test_set(model, test_set, lower_threshold, upper_threshold, actual_
         else:
             actual_ADL_count['predicted_ADL'] += 1
     
-    plot_ADL_test(predicted, lower_threshold, upper_threshold, OUTPUT_PATH)
+    plot_set_results(predicted, lower_threshold, upper_threshold, OUTPUT_PATH, 'prediction values of ADL test set', 'best')
     
 def test_FALL_test_set(model, test_set, lower_threshold, upper_threshold, actual_FALL_count, OUTPUT_PATH, fig_name = 'prediction_test_set_FALL'):
-    from visualization import plot_FALL_test
+    from visualization import plot_set_results
     
     predicted = model.predict(test_set)
     size = len(predicted)
@@ -66,8 +66,8 @@ def test_FALL_test_set(model, test_set, lower_threshold, upper_threshold, actual
             actual_FALL_count['predicted_FALL'] += 1
         else:
             actual_FALL_count['predicted_ADL'] += 1
-    
-    plot_FALL_test(predicted, lower_threshold, upper_threshold, OUTPUT_PATH, fig_name = 'prediction_test_set_FALL')
+
+        plot_set_results(predicted, lower_threshold, upper_threshold, OUTPUT_PATH, fig_name, 'best')
     
     
     
