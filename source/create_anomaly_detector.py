@@ -36,19 +36,20 @@ params = {
               'validation_set': 24
           },
           
-          'cut_first_ADL': 0,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_last_ADL': 0,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           'cut_first_FALL': 2,
-          'cut_last_FALL': 4,
+          'cut_last_FALL': 2,
           
-          'normalization': False,
-          'normalization_range': '(-1,1)'  ### Suggested options are '(-1,1)' and '(0,1)'
+          'normalization': True,
+          'normalization_downer_bound': 0,
+          'normalization_upper_bound': 1
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_3"
+OUTPUT_MODEL_NAME = "model_5"
 
 """
         Burayi baska zaman tekrar yapmak gerekecek
@@ -68,12 +69,10 @@ if params['cut_last_ADL'] == 0:
 else:
     ending_index = - (params['cut_last_ADL'] * params['resample']['frequency'])
 
-train_set = read_from_file.get_samples(ADL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
+train_set = read_from_file.get_samples(ADL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params)
 
 train_set_ADL, validation_set_ADL, test_set_ADL = get_datasets(train_set, params['window_size'], params['random_state']['test_set'], params['random_state']['validation_set'])
-
-ADL_set_size = train_set_ADL.shape[0] + validation_set_ADL.shape[0] + test_set_ADL.shape[0]
-
+    
 ### Creating outputs for ADL class which is represented by 0
 expected_output_train = np.zeros((train_set_ADL.shape[0], 1))
 expected_output_test = np.zeros((test_set_ADL.shape[0], 1))  ### Output olarak herhangi bir time-series verisini tahmin etmesini istemiyoruz 0'a yakin sectim ki bu sayede en azından threshold degeri olarak daha alt degerler secmis olalim    
@@ -107,14 +106,14 @@ if params['cut_last_FALL'] == 0:
 else:
     ending_index = - (params['cut_last_FALL'] * params['resample']['frequency'])
 
-test_set_FALL = read_from_file.get_samples(FALL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
+test_set_FALL = read_from_file.get_samples(FALL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params)
 
 print("test_set_FALL.shape[0]: ", test_set_FALL.shape[0])
 
 ### Shaping datasets as in windows
 sample_amount = test_set_FALL.shape[0] // params['window_size']
 test_set_FALL = test_set_FALL.values
-test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , 9))
+test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , params['window_feature']))
 
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 

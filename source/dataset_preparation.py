@@ -19,7 +19,24 @@ def get_datasets(train_set_ADL, window_size, random_state_test, random_state_val
     
     return split_datasets(train_set_ADL, random_state_test, random_state_validation)
 
-def normalization(dataset): ### acc-x acc-y acc-z ori-x ori-y ori-z gyro-x gyro-y gyro-z    
+"""
+    TODO: Normalizasyondaki min max'ı datasete gore belirleyelim yoksa problem yani bu boyle olmaz degerler fazla
+    kucuk cikiyor isimizi zorlastiriyorlar fazlasiyla. FALL'lar icin baska secenekler dusunmek lazim bu arada ne tarz bir sey
+    dusunebiliriz bilmiyorum ama bir halletmek lazim mantiken dimi ???
+    
+    TODO:  Daha iyi bir sekilde kesilmesi gerekiyor bu durumlarin ki daha rahat bir sekilde isimizi gorelim.
+    Bu nasil yapilir gene kafalarda soru isareti var kabul ediyorum bu durumu. Ayrica normalizasyon range'ine gore 
+    de bir kere denemek lazim yani bunu olabildigince formüle edelim de bir güzel rahatlayalim mesela 0,1 arasinda bir
+    normalizasyon denemek daha iyi olabilir belki de.
+    
+    TODO: Bir de hem -1,1 hem de 0,1 arasinda normalizasyon yapayarak deneyelim ki ayni zamanda boyle bir islem icin
+    hangi normalizasyon degerleri daha onemli olabilir bununla da ilgili bir sonuc elde edebilmis oluruz
+    
+    TODO: Beyaz tahta gibi bir seye oynayabilecegim parametreler ve bunlara vermek istedigim degerler ile ilgili seyler
+    yazmak lazim. Ki daha rahat belli bir standartımız olabilsin.
+"""
+
+def normalization(dataset, downer_bound, upper_bound): ### acc-x acc-y acc-z ori-x ori-y ori-z gyro-x gyro-y gyro-z    
     g = 9.81
 
     ### based on the sensors used to obtain samples (reference: Analysis of Public Datasets for Wearable Fall Detection Systems)
@@ -52,6 +69,6 @@ def normalization(dataset): ### acc-x acc-y acc-z ori-x ori-y ori-z gyro-x gyro-
         min_value = sensor_min_value[col_name]
         
         ### Normalizing dataset into (-1, 1) 
-        dataset[col_name] = (2 * (dataset[col_name] - min_value) / (max_value - min_value)) - 1    
+        dataset[col_name] = ((upper_bound - downer_bound) * (dataset[col_name] - min_value) / (max_value - min_value)) + downer_bound    
 
     return dataset
