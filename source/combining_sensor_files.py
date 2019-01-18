@@ -8,10 +8,10 @@ COMBINED_DATA_PATH_FALL = "../resampled-data/FALL"
 def get_ADL_files(folder_path, file_paths = []):
     for file in os.listdir(folder_path):
         file_path = folder_path + "/" + file
-        if os.path.isdir(file_path) and "FALL" not in file_path: ### burayı daha sonra tekrardan elden gecirmek             
-            file_paths = get_ADL_files(file_path, file_paths)    ### gerekecek bu sayede fall'ların da pathlerini bir yerde tutarız hem
-        elif "FALL" not in file_path:       ### adl ve fall'i iki farkli listede tutariz o sekilde yeniden bir seyler yapabiliriz
-            file_paths.append(file_path) ### ya da genel olarak bilmiyorum acc'leri alıp onlari combine edip bir yere koymak daha kolay olabilir yani ayri ayri fall mi bu adl mi diye bakmaktansa hani direkt acc gecenleri al onlari diger 2 sensor ile de birlestir bir dosyaya kaydet ve daha sonra adl mi lazim bu pathleri dondur, fall mi lazim bu pathleri dondur seklinde bir yol izlenebilir
+        if os.path.isdir(file_path) and "FALL" not in file_path: 
+            file_paths = get_ADL_files(file_path, file_paths)
+        elif "FALL" not in file_path:    
+            file_paths.append(file_path) 
     return file_paths
 
 def get_FALL_files(folder_path, file_paths = []):
