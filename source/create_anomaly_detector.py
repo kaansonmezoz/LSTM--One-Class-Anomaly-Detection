@@ -15,7 +15,10 @@ import numpy as np
 ### bu parametreler oncelikle dosyadan okunmaya calisilmasi gerekir aslında ... ya da model kaydedilmisse eger bu parametreler zaten dosya da 
 ### var demektir bu parametreler dosyaya surekli yaziliyor bunlarla ilgili  refactoring olmali. ayrica eger dosya halihazirda varsa yani model kayitliyse
 ### bizim bu parametreleri dosyadan okumamiz gerekiyorsa nasil modeli yukluyorsak
-### defining hyper parameters such as fitting parameters, dataset frequency, window size
+
+
+### defining hyper parameters such as fitting parameters, dataset frequency, window size and other parameters
+### related to anomaly_detector
 
 params = {
           'epochs': 50, 
@@ -41,7 +44,7 @@ params = {
           'cut_last_FALL': 2,
           
           'normalization': False,
-          'normalization_range': '(-1,1)'  ### options for this parameter are '(-1,1)' and '(0,1)'
+          'normalization_range': '(-1,1)'  ### Suggested options are '(-1,1)' and '(0,1)'
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
