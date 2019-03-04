@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
+from keras        import optimizers
 from keras.layers import Dropout
 from keras.layers import Reshape
 from keras.layers import Input
@@ -33,7 +34,7 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     ### Configuring optimizer  burada bir kontrol konulmali ileride ki optimizer degisirse ilgili optimizer gelsin
     ### optimizer = params['optimizer'] bunu kullanip ilgili kontrol yapilip sonra da optimizer alinmali
     
-    adam = keras.optimizers.Adam(lr = params['learning-rate'])
+    adam = optimizers.Adam(lr = params['learning-rate'])
     
     ### Compiling LSTM    
     model.compile(loss = params['loss_function'],  optimizer = adam)
