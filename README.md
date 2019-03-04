@@ -9,6 +9,7 @@ Bu dosya güncellenecektir.
 Kullanılmayan fonksiyonlar, tekrar eden kod parçaları var .py dosyalarında, onlar da refactor edilecektir.
 
 Notlar: 
+* ADL'ler içerisinde FALL benzeri hareketleri alıp bir teste sokalım. Bakalım kaç tanesine FALL diyecek, kaç tanesine ADL diyecek bunu gözlemlemiş oluruz.
 * ADL'in başından kesmemek için read_from_file.get_samples(ADL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', 0, None, params['window_size'], params['sliding_window']) şeklinde çağırıldığında test_set_FALL'lar düzgün bir şekilde oluşmuyor. (0, 300, 9) şekline sahip bir dataframe oluşuyor. Bu hata çözülene kadar şimdilik oraların da kesilerek çağırılması gerekiyor.
 * Sensör verilerinin 80Hz ve üstünde olanları sadece alınmıştır. Bunun altında kalan frekanslardaki sensör dosyaları resampling işlemine tabii tutulmayarak model için kullanılack verilerin içerisinde yer almamaktadır.
 * MobiFall'ın readme dosyasında yer alan özellikler ile veri özellikleri arasında örtüşmeyen durumlar vardır. Fall olaylarının süresi 10 saniye olarak belirtilmiştir bazı fall olayları 10 saniyeden daha fazla sürmektedir. Sensör verilerinin örnekleme frekansı da readme yazan frekans ile farklılık göstermektedir.
@@ -29,3 +30,4 @@ Notlar:
   * Tekrar eden fonksiyonlar, kod parçaları var 
   * Resampling frekansı ile ilgili değişiklikler yapılarak tekrardan denenebilir. Resampling metodu olarak numpy'in bir fonksiyonu vardı o kullanılarak tekrar denenebilir. Bununla ilgili yöntemi metodu seçen kod kısmı da yazılması gerekmektedir.
   * Daha detaylı bir dökümantasyon hazırlanmalıdır. Bu dökümantasyonda fonksiyonların yaptığı işler, aldıkları parametreler ve döndürdükleri sonuçlar yer almalıdır.
+  * Raporlama modulu yazılmalı sonuçları bir excel'e çıkartan. Bu sayede elde edilen butun sonucların raporlanması saglanir excele aktarılarak ve modeller arasında karşılaştırmalar daha kolay yapılabilir
