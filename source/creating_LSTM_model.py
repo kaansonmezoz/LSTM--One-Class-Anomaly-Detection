@@ -17,7 +17,7 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['window_size'],params['window_feature']))))
 
     ### Adding 2nd LSTM Layer
-    model.add(LSTM(units = 200, return_sequences = False))
+    model.add(LSTM(units = 200, return_sequences = False, dropout = params['lstm-2-dropout']))
     
     ### Adding the first Feed-Forward layer with 200 units
     model.add(Dense(units = 200))
@@ -30,8 +30,13 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     model.add(Dense(units = 1, ))
     model.summary()
 
-    ### Compiling LSTM
-    model.compile(loss = params['loss_function'], optimizer = params['optimizer'])
+    ### Configuring optimizer  burada bir kontrol konulmali ileride ki optimizer degisirse ilgili optimizer gelsin
+    ### optimizer = params['optimizer'] bunu kullanip ilgili kontrol yapilip sonra da optimizer alinmali
+    
+    adam = keras.optimizers.Adam(lr = params['learning-rate'])
+    
+    ### Compiling LSTM    
+    model.compile(loss = params['loss_function'],  optimizer = adam)
 
     ### Fitting LSTM to the training set
     history = model.fit(train_set_ADL, expected_output_train, epochs = params['epochs'], batch_size = params['batch_size'])

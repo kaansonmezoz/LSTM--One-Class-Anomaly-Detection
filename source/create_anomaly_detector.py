@@ -21,7 +21,7 @@ import numpy as np
 ### related to anomaly_detector
 
 params = {
-          'epochs': 50, 
+          'epochs': 100, 
           'batch_size': 128, 
           
           'window_size': 300,           ### sample_duration * resample_frequency seklinde bulunur
@@ -38,17 +38,21 @@ params = {
               'validation_set': 24
           },
           
-          'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_first_ADL': 0,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
+          'cut_last_ADL': 0,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           
-          'cut_first_FALL': 0,                ### bu parametreler ile saglandi tek fall verisi elde edilmesi
-          'cut_last_FALL': 6,
+          'cut_first_FALL': 3,                ### bu parametreler ile saglandi tek fall verisi elde edilmesi
+          'cut_last_FALL': 3,
           
           'normalization': False,
           'normalization_range': '(-1,1)',  ### Suggested options are '(-1,1)' and '(0,1)'
           
           'optimizer': 'adam',
-          'loss_function': 'mean_squared_error'
+          'loss_function': 'mean_squared_error',
+          'learning-rate': 0.005,
+          
+          'lstm-dropout-1': 0.2,        ### bu ilk layer inputları alıyor belki de boyle bir dropout uygulamamak gerekir
+          'lstm-dropout-2': 0.2
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
@@ -124,7 +128,7 @@ test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , 9)
     
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
-from statistics import analyze_results
+from Statistics import analyze_results
 
 save_json("../models/" + OUTPUT_MODEL_NAME, 'results', {'ADL': actual_ADL_count, 'FALL': actual_FALL_count})
 analyze_results({'ADL': actual_ADL_count, 'FALL': actual_FALL_count}, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
