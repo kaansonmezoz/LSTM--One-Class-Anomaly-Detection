@@ -24,9 +24,9 @@ params = {
           'epochs': 50, 
           'batch_size': 128, 
           
-          'window_size': 400,           ### sample_duration * resample_frequency seklinde bulunur
+          'window_size': 300,           ### sample_duration * resample_frequency seklinde bulunur
           'window_feature': 9,
-          'sliding_window': 200, 
+          'sliding_window': 200,        ### sadece adl verileri icin gecerli olacak bu sliding_window parametresi
           
           'resample': {
                   'frequency': 100,
@@ -40,17 +40,21 @@ params = {
           
           'cut_first_ADL': 2,                 ### bastan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
           'cut_last_ADL': 2,                  ### sondan kac saniye kesilecegini belirtir. Kesilmeyecekse sifir verilmeli
-          'cut_first_FALL': 2,
-          'cut_last_FALL': 2,
+          
+          'cut_first_FALL': 0,                ### bu parametreler ile saglandi tek fall verisi elde edilmesi
+          'cut_last_FALL': 6,
           
           'normalization': False,
-          'normalization_range': '(-1,1)'  ### Suggested options are '(-1,1)' and '(0,1)'
+          'normalization_range': '(-1,1)',  ### Suggested options are '(-1,1)' and '(0,1)'
+          
+          'optimizer': 'adam',
+          'loss_function': 'mean_squared_error'
 }
 
 ADL_SET_PATH = "../resampled-data/ADL"
 FALL_SET_PATH = "../resampled-data/FALL"
 OUTPUT_DIRECTORY = "../models"
-OUTPUT_MODEL_NAME = "model_26"
+OUTPUT_MODEL_NAME = "model_32"
 
 """
         Burayi baska zaman tekrar yapmak gerekecek
@@ -85,7 +89,7 @@ if os.path.isfile(model_file_path):
     print('Model has been already created with this name. Model is loading.')
     
     model = load_model(model_file_path)
-    model.summarize()
+    model.summary()
     
 else:
     print('New model has been creating.')
@@ -107,6 +111,8 @@ if params['cut_last_FALL'] == 0:
 else:
     ending_index = - (params['cut_last_FALL'] * params['resample']['frequency'])
 
+params['sliding_window'] = 600 ### 10 saniyelik bir hareketten 3 saniye kestigimiz zaman window_size = 600 iken bir window cikabilmesi icin window_sliding'in 600 olmasi gerekiyor. Bu sayede her bir fall verisinden bir adet window cikarmis oluyoruz.
+
 test_set_FALL = read_from_file.get_samples(FALL_SET_PATH, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME + '/', beginning_index, ending_index, params['window_size'], params['sliding_window'])
 
 print("test_set_FALL.shape[0]: ", test_set_FALL.shape[0])
@@ -115,9 +121,10 @@ print("test_set_FALL.shape[0]: ", test_set_FALL.shape[0])
 sample_amount = test_set_FALL.shape[0] // params['window_size']
 test_set_FALL = test_set_FALL.values
 test_set_FALL = test_set_FALL.reshape((sample_amount, params['window_size'] , 9))
-
+    
 test_FALL_test_set(model, test_set_FALL, min_value, max_value, actual_FALL_count, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)
 
 from statistics import analyze_results
 
+save_json("../models/" + OUTPUT_MODEL_NAME, 'results', {'ADL': actual_ADL_count, 'FALL': actual_FALL_count})
 analyze_results({'ADL': actual_ADL_count, 'FALL': actual_FALL_count}, OUTPUT_DIRECTORY + '/' + OUTPUT_MODEL_NAME)

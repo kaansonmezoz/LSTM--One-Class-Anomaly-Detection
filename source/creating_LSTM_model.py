@@ -31,7 +31,7 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     model.summary()
 
     ### Compiling LSTM
-    model.compile(loss = 'mean_squared_error', optimizer = 'adam')
+    model.compile(loss = params['loss_function'], optimizer = params['optimizer'])
 
     ### Fitting LSTM to the training set
     history = model.fit(train_set_ADL, expected_output_train, epochs = params['epochs'], batch_size = params['batch_size'])
