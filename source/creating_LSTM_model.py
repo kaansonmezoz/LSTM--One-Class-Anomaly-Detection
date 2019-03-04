@@ -17,7 +17,7 @@ def creating_model(params, OUTPUT_MODEL_NAME, train_set_ADL, expected_output_tra
     model.add(LSTM(units = 200, return_sequences = True, input_shape = ((params['window_size'],params['window_feature']))))
 
     ### Adding 2nd LSTM Layer
-    model.add(LSTM(units = 200, return_sequences = False, dropout = params['lstm-2-dropout']))
+    model.add(LSTM(units = 200, return_sequences = False, dropout = params['lstm-dropout-2']))
     
     ### Adding the first Feed-Forward layer with 200 units
     model.add(Dense(units = 200))
